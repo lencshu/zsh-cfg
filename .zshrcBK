@@ -1,0 +1,9 @@
+export PATH="$HOME/bin:$PATH"
+
+eval "$(atuin init zsh)"
+
+# auto load  all .zsh files from ~/bin
+for file in ~/bin/*.zsh; do
+  # echo "Loading $file"
+  [ -r "$file" ] && source "$file"
+done
