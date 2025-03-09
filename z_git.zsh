@@ -28,6 +28,7 @@ alias fch='git fetch -a'
 alias gd='git branch -D'
 alias gpn='git remote prune origin'
 
+alias upmind='add && cmt updated && psh main'
 
 
 gsq() {
