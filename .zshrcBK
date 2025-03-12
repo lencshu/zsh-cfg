@@ -1,9 +1,123 @@
+alias tnodeh='/Users/vi/Tdarr/Tdarr_Node/Tdarr_Node >> /Users/vi/Tdarr/tdarr_node.log 2>&1'
+
+alias tnode='/Users/vi/Tdarr/Tdarr_Node/Tdarr_Node'
+
+alias hball='find . -type f \( -iname "*.ts" -o -iname "*.mp4" -o -iname "*.mkv" -o -iname "*.wmv" -o -iname "*.mov" \) -exec sh -c '\''file="{}"; dir=$(dirname "$file"); filename=$(basename "$file" | sed "s/\.[^.]*$//"); output="${dir}/${filename}_comp.mp4"; /Applications/HandBrakeCLI -i "$file" -o "$output" --all-subtitles --subtitle-burn 1 && rm "$file" && mv "$output" "${dir}/${filename}.mp4"'\'' \;'
+
+alias hballburn='find . -type f \( -iname "*.ts" -o -iname "*.mp4" -o -iname "*.mkv" -o -iname "*.wmv" -o -iname "*.mov" \) -exec sh -c '\''file="{}"; dir=$(dirname "$file"); filename=$(basename "$file" | sed "s/\.[^.]*$//"); output="${dir}/${filename}_comp.mp4"; /Applications/HandBrakeCLI -i "$file" -o "$output" --all-subtitles --subtitle-burn 1 && rm "$file" && mv "$output" "${dir}/${filename}.mp4"'\'' \;'
+
+alias hb='/Applications/HandBrakeCLI'
+alias zonya='/Users/vi/zony/zony.Cli download -a -n 2  -d'
+alias zonyl='/Users/vi/zony/zony.Cli download -l -n 2  -d'
+
+alias envon='source .venv/bin/activate'
+
+alias wg='python /Users/vi/winGo.py'
+
+alias rsbt='sudo pkill bluetoothd'
+alias po='poetry'
+alias pg311='pyenv global 3.11 && pyenv shell 3.11 && python --version'
+alias pg39='pyenv global 3.9 && pyenv shell 3.9 && python --version'
+alias ip='interpreter'
+alias pop='poetry run python'
+alias tabe='sudo nano /var/at/tabs/vi'
+
+alias mkenv='cp ~/mkcfg ~/.gitconfig && echo env mk'
+alias glenv='cp ~/.ssh/id_rsa.pub.gl ~/.ssh/id_rsa.pub && cp ~/.ssh/id_rsa.gl ~/.ssh/id_rsa && cp ~/glcfg ~/.gitconfig && echo env gl'
+alias techenv='cp ~/.ssh/id_rsa.pub.tech ~/.ssh/id_rsa.pub && cp ~/.ssh/id_rsa.tech ~/.ssh/id_rsa && cp ~/glcfg ~/.gitconfig && echo env tech'
+
+alias upmind='add && cmt updated && psh main'
+
+alias pp='pnpm'
+
+gsq() {
+    git rebase -i HEAD~"$1"
+}
+
+pm() {
+
+    git checkout dev2 && git rebase main && git push origin dev2 && git tag "$1" && git push origin --tags
+}
+
+alias ggc='git prune && git gc && git fsck'
+alias gsl='git shortlog --all --summary --no-merges'
+alias cf='code2flow --language py'
+alias gsup='git submodule update --init'
+alias gspll='git submodule foreach git pull origin'
+alias gfh='git submodule foreach git'
+alias gs='git submodule'
+alias gtg='git tag'
+alias rst='git reset'
+alias rsth='git reset --hard'
+alias gcp='git cherry-pick'
+alias gig='git rm -r --cached .'
+alias ff='fvm flutter'
+alias fd='fvm dart'
+alias profile='nano ~/.zshrc'
+alias add='git add .'
+alias cmt='git commit -m'
+alias cma='git commit -a'
+alias psh='git push origin'
+alias psl='git push l'
+alias pshf='git push origin -f'
+alias pll='git pull origin'
+alias rbs='git rebase'
+alias mge='git merge'
+alias cout='git checkout'
+alias fch='git fetch -a'
+alias gd='git branch -D'
+alias gpn='git remote prune origin'
+alias sst='serverless test'
+alias sstmf='serverless test --stage prod --function'
+alias sstdf='serverless test --stage dev --function'
+alias sstbf='serverless test --stage beta --function'
+alias sstff='serverless test --stage feature --function'
+alias sstpf='serverless test --stage preprod --function'
+alias pth='pytest -vv -W ignore::DeprecationWarning --html=report.html --self-contained-html'
+alias ptm='pytest -vv -W ignore::DeprecationWarning -m'
+alias pt='pytest -vv -W ignore::DeprecationWarning'
+alias ssd='serverless deploy --force --verbose --stage'
+
+glenv
+export PATH=/opt/homebrew/bin:/Users/vi/dev/flutter/bin:/Users/vi/.serverless/bin:/Library/Frameworks/Python.framework/Versions/3.11/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
+source "$HOME/.cargo/env"
 export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.serverless/bin:$PATH"
+export PATH="/Users/vi/fvm/default/bin:$PATH"
+# export CHROME_EXECUTABLE="/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
+export CHROME_EXECUTABLE="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+
+# Added by Amplify CLI binary installer
+export PATH="$HOME/.amplify/bin:$PATH"
+eval "$(pyenv init -)"
+
+# pnpm
+export PNPM_HOME="/Users/vi/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+export PATH=$PATH:$HOME/.local/bin
+source /Users/vi/assurly/retroApiChatGPT/cred.sh
+export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+export PKG_CONFIG_PATH="/opt/homebrew/opt/libffi/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+export PATH=$PATH:/Users/vi/flutter/bin
+
+# Wasmer
+export WASMER_DIR="/Users/vi/.wasmer"
+[ -s "$WASMER_DIR/wasmer.sh" ] && source "$WASMER_DIR/wasmer.sh"
+
+# Secretive Config
+export SSH_AUTH_SOCK=/Users/vi/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
 
 eval "$(atuin init zsh)"
 
-# auto load  all .zsh files from ~/bin
-for file in ~/bin/*.zsh; do
-  # echo "Loading $file"
-  [ -r "$file" ] && source "$file"
-done
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+. "$HOME/.atuin/bin/env"
