@@ -1,6 +1,8 @@
 alias profilez='nano ~/.zshrc'
 alias profile='code ~/.zshrc'
+alias profilet='trae ~/.zshrc'
 alias profiles='code ~/bin'
+alias profilest='trae ~/bin'
 alias rsbt='sudo pkill bluetoothd'
 alias ip='interpreter'
 alias tabe='sudo nano /var/at/tabs/vi'
