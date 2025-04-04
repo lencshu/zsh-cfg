@@ -41,7 +41,7 @@ pm() {
     git checkout dev2 && git rebase main && git push origin dev2 && git tag "$1" && git push origin --tags
 }
 
-psync() {
+gsy() {
   if [ -z "$1" ]; then
     echo "Usage: psync <remote-url>"
     return 1
