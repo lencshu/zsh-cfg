@@ -41,35 +41,56 @@ pm() {
     git checkout dev2 && git rebase main && git push origin dev2 && git tag "$1" && git push origin --tags
 }
 
-pass() {
-if [ -z "$1" ]; then
-    echo "Usage: git_sync_to_remote <remote-url>"
+psync() {
+  if [ -z "$1" ]; then
+    echo "Usage: psync <remote-url>"
     return 1
   fi
 
-  # Step 1: 添加 remote l
-  git remote add l "$1" 2>/dev/null || echo "Remote 'l' already exists. Skipping add."
+  # 保存当前分支，待会恢复
+  current_branch=$(git rev-parse --abbrev-ref HEAD)
 
-  # Step 2: 获取最新信息
+  # 添加 remote l（如果未存在）
+  if ! git remote get-url l &>/dev/null; then
+    git remote add l "$1"
+  else
+    echo "Remote 'l' already exists. Skipping add."
+  fi
+
+  # 获取远程分支和标签
   git fetch origin --tags
 
-  # Step 3: 推送函数（封装一下判断）
+  # 封装推送函数
   push_branch_if_exists() {
     local branch="$1"
     if git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
       echo "Syncing branch: $branch"
+
+      # 拉取该分支
       git fetch origin "$branch"
-      git push l "origin/$branch:refs/heads/$branch"
+
+      # 创建临时分支
+      temp_branch="__tmp_sync_$branch"
+      git checkout -B "$temp_branch" "origin/$branch"
+
+      # 推送到 remote l
+      git push l "$temp_branch:$branch"
+
+      # 切回原始分支
+      git checkout "$current_branch"
+
+      # 删除临时分支
+      git branch -D "$temp_branch"
     else
       echo "Branch '$branch' not found on origin. Skipping."
     fi
   }
 
-  # Step 4: 推送 dev2 和 develop
+  # 推送 dev2 和 develop
   push_branch_if_exists "dev2"
   push_branch_if_exists "develop"
 
-  # Step 5: 推送 master 或 main（优先 master）
+  # 推送 master 或 main
   if git show-ref --verify --quiet "refs/remotes/origin/master"; then
     push_branch_if_exists "master"
   elif git show-ref --verify --quiet "refs/remotes/origin/main"; then
@@ -78,7 +99,10 @@ if [ -z "$1" ]; then
     echo "Neither 'master' nor 'main' branch found on origin. Skipping."
   fi
 
-  # Step 6: 推送所有 tags
+  # 推送 tags
   echo "Pushing all tags to remote 'l'..."
   git push l --tags
+
+  # 最后回到原来的分支（保险）
+  git checkout "$current_branch"
 }
