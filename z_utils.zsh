@@ -1,5 +1,7 @@
+alias win='cd /mnt/c/Users/lencs/pro'
 alias profilez='nano ~/.zshrc'
 alias profile='code ~/.zshrc'
+alias profileb='code ~/.bashrc'
 alias profilet='trae ~/.zshrc'
 alias profiles='code ~/bin'
 alias profilest='trae ~/bin'

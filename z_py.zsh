@@ -7,3 +7,4 @@ alias pth='pytest -vv -W ignore::DeprecationWarning --html=report.html --self-co
 alias ptm='pytest -vv -W ignore::DeprecationWarning -m'
 alias pt='pytest -vv -W ignore::DeprecationWarning'
 alias envon='source .venv/bin/activate'
+alias envinit='virtualenv .venv'
