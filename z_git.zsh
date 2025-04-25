@@ -119,12 +119,12 @@ function add_remote_and_push() {
   # 提取原始项目名
   if [[ "$origin_url" == *@*:* ]]; then
     # SSH 格式：git@host:owner/project.git
-    path=${origin_url#*:}
+    pathj=${origin_url#*:}
   else
     # HTTPS 格式：https://host/owner/project.git
-    path=${origin_url#*://*/}
+    pathj=${origin_url#*://*/}
   fi
-  original_proj=$(basename "${path}" .git)
+  original_proj=$(basename "${pathj}" .git)
 
   # 确定使用的远程项目名：优先第一个参数，否则用原名
   project=${1:-$original_proj}
@@ -147,7 +147,7 @@ function add_remote_and_push() {
 
   # 添加 l remote，如果已存在则先删除
   if git remote get-url l &> /dev/null; then
-    echo "ℹ️ remote 'l' 已存在，正在删除旧的 remote"
+    echo "remote 'l' 已存在，正在删除旧的 remote"
     git remote remove l
   fi
   git remote add l "$new_url"
@@ -159,6 +159,6 @@ function add_remote_and_push() {
     echo "🚀 正在推送到 remote 'l' 的分支: $branch"
     git push l "$branch"
   else
-    echo "ℹ️ 未提供分支名，不执行 push 操作"
+    echo "未提供分支名，不执行 push 操作"
   fi
 }
