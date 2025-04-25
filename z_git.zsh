@@ -106,3 +106,59 @@ gsy() {
   # 最后回到原来的分支（保险）
   git checkout "$current_branch"
 }
+
+
+function add_remote_and_push() {
+  # 获取 origin 的 URL
+  origin_url=$(git remote get-url origin 2> /dev/null)
+  if [[ -z "$origin_url" ]]; then
+    echo "❌ 当前目录不是一个有效的 git 仓库，或没有 origin remote"
+    return 1
+  fi
+
+  # 提取原始项目名
+  if [[ "$origin_url" == *@*:* ]]; then
+    # SSH 格式：git@host:owner/project.git
+    path=${origin_url#*:}
+  else
+    # HTTPS 格式：https://host/owner/project.git
+    path=${origin_url#*://*/}
+  fi
+  original_proj=$(basename "${path}" .git)
+
+  # 确定使用的远程项目名：优先第一个参数，否则用原名
+  project=${1:-$original_proj}
+
+  # 构造新的 remote 地址
+  if [[ "$origin_url" == *@*:* ]]; then
+    # SSH
+    domain_and_host=${origin_url%%:*}
+    new_url="${domain_and_host}:lencshu/${project}.git"
+  else
+    # HTTPS
+    domain_prefix=$(echo "$origin_url" | sed -E 's#(https?://[^/]+)/.*#\1#')
+    new_url="${domain_prefix}/lencshu/${project}.git"
+  fi
+
+  echo "✅ 原始 remote: $origin_url"
+  echo "✅ 原始项目名称: $original_proj"
+  echo "✅ 使用的远程项目名称: $project"
+  echo "✅ 新 remote l: $new_url"
+
+  # 添加 l remote，如果已存在则先删除
+  if git remote get-url l &> /dev/null; then
+    echo "ℹ️ remote 'l' 已存在，正在删除旧的 remote"
+    git remote remove l
+  fi
+  git remote add l "$new_url"
+  echo "✅ remote 'l' 添加成功"
+
+  # 第二个参数为分支名，若提供则自动推送
+  if [[ -n "$2" ]]; then
+    branch="$2"
+    echo "🚀 正在推送到 remote 'l' 的分支: $branch"
+    git push l "$branch"
+  else
+    echo "ℹ️ 未提供分支名，不执行 push 操作"
+  fi
+}
