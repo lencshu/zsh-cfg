@@ -28,6 +28,8 @@ alias cout='git checkout'
 alias fch='git fetch -a'
 alias gd='git branch -D'
 alias gpn='git remote prune origin'
+alias fall='pre-commit run --all-files'
+alias aleg='alembic revision --autogenerate -m'
 
 alias upmind='add && cmt updated && psh main'
 
