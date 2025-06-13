@@ -7,8 +7,8 @@ compinit
 
 alias d='docker'
 alias dc='docker compose'
-alias dcu='docker compose up'
-alias dcd='docker compose down'
+alias dcu='docker compose up --build -d'
+alias dcd='docker compose down -v'
 alias dcl='docker compose logs'
 alias dcp='docker compose ps'
 alias dcr='docker compose restart'
