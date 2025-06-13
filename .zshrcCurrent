@@ -3,10 +3,12 @@ export PATH="$HOME/bin:$PATH"
 source $HOME/.atuin/bin/env
 eval "$(atuin init zsh)"
 
+. "$HOME/.atuin/bin/env"
+
+
 # auto load  all .zsh files from ~/bin
 for file in ~/bin/*.zsh; do
   # echo "Loading $file"
   [ -r "$file" ] && source "$file"
 done
-
-. "$HOME/.atuin/bin/env"
+# end
