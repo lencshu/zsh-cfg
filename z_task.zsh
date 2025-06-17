@@ -1,0 +1,5 @@
+alias t='task'
+alias tls='task list'
+alias tls='task list'
+alias tsb='t app:run > runb.log 2>&1'
+alias tsf='cd front && npm run dev | tee ../runf.log'
