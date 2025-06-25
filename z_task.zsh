@@ -9,4 +9,4 @@ alias tsb='t app:run > runb.log 2>&1'
 
 alias tsf='cd front && npm install && npm run dev | tee ../runf.log'
 
-alias tsdev='trap "cd ..; exit" INT; tsb & tsf; wait'
+alias tsdev='trap "cd .." INT; tsb & tsf; wait'
