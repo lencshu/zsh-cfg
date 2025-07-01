@@ -7,6 +7,7 @@ alias profiles='cursor ~/bin'
 alias profilest='trae ~/bin'
 alias rsbt='sudo pkill bluetoothd'
 alias ip='interpreter'
+alias go='gemini'
 alias riper='cp -rf /Users/vi/pro/CursorRIPER.sigma/.cursor ./'
 alias tabe='sudo nano /var/at/tabs/vi'
 # export CHROME_EXECUTABLE="/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
