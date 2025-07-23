@@ -1,11 +1,6 @@
 ---
 alwaysApply: true
 ---
----
-description: Systematic guidance and recommendations for complex tasks such as refactoring, system analysis, and architectural work.
-globs:
-alwaysApply: false
----
 # RIPER-5 + MULTIDIMENSIONAL THINKING + AGENT EXECUTION PROTOCOL
 
 ## Table of Contents
@@ -393,7 +388,11 @@ If the language type is uncertain, use the generic format:
 - Using code placeholders (unless part of the plan)
 
 ## Task File Template
+
+
 <a id="task-file-template"></a>
+
+Please generate this file in the ./_logs folder.
 
 ```markdown
 # Context
