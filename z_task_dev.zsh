@@ -8,6 +8,25 @@ tsdev() {
     # 确保日志目录存在
     mkdir -p ./_logs
     
+    # 归档现有日志文件
+    echo "📦 归档现有日志文件..."
+    local archived_logs_dir="./_logs/_archived_logs"
+    mkdir -p "$archived_logs_dir"
+    
+    # 查找并移动所有.log文件到归档目录
+    local log_files=($(find ./_logs -maxdepth 1 -name "*.log" -type f 2>/dev/null))
+    if [[ ${#log_files[@]} -gt 0 ]]; then
+        echo "📋 发现 ${#log_files[@]} 个日志文件，正在归档..."
+        for log_file in "${log_files[@]}"; do
+            local filename=$(basename "$log_file")
+            echo "   📁 归档: $filename"
+            mv "$log_file" "$archived_logs_dir/"
+        done
+        echo "✅ 日志归档完成"
+    else
+        echo "📝 无需归档的日志文件"
+    fi
+    
     # 生成带时间戳的日志文件名
     local backend_log_file="./_logs/runb_$(date +%Y%m%d_%H%M%S).log"
     local frontend_log_file="./_logs/runf_$(date +%Y%m%d_%H%M%S).log"
@@ -357,6 +376,7 @@ tshelp() {
     echo "  ✅ 保护数据库数据（不会删除数据库容器）"
     echo "  ✅ 混合启动模式：后端docker + 前端npm"
     echo "  ✅ 前后端日志分别保存到不同文件"
+    echo "  ✅ 自动归档旧日志文件到 _logs/_archived_logs 目录"
     echo "  ✅ 优雅的中断处理，支持Ctrl+C停止"
     echo "  ✅ 自动检查端口占用和目录结构"
     echo ""
@@ -368,6 +388,7 @@ tshelp() {
     echo "日志文件格式:"
     echo "  后端: ./_logs/runb_YYYYMMDD_HHMMSS.log"
     echo "  前端: ./_logs/runf_YYYYMMDD_HHMMSS.log"
+    echo "  归档: ./_logs/_archived_logs/"
     echo ""
     echo "示例:"
     echo "  tsdev                    # 同时启动：docker后端 + npm前端"
