@@ -1,6 +1,6 @@
 alias t='task'
 alias tls='task list'
-alias tls='task list'
+alias tb='task app:build'
 
 
 # alias tsb='t app:run 2>&1 | perl -pe "s/\x00//g; s/\e\[[0-9;]*[a-zA-Z]//g" > runb.log'
