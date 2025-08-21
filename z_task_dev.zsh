@@ -5,6 +5,17 @@ tsdev() {
     echo "🚀 启动完整开发环境..."
     echo "📍 当前目录: $(basename "$PWD")"
     
+    # 解析参数
+    local enable_worker=0
+    while getopts ":w" opt; do
+        case $opt in
+            w)
+                enable_worker=1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    
     # 确保日志目录存在
     mkdir -p ./_logs
     
@@ -28,10 +39,18 @@ tsdev() {
     fi
     
     # 生成带时间戳的日志文件名
-    local backend_log_file="./_logs/runb_$(date +%Y%m%d_%H%M%S).log"
-    local frontend_log_file="./_logs/runf_$(date +%Y%m%d_%H%M%S).log"
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local backend_log_file="./_logs/${timestamp}_runb.log"
+    local frontend_log_file="./_logs/${timestamp}_runf.log"
+    local worker_log_file
+    if [[ $enable_worker -eq 1 ]]; then
+        worker_log_file="./_logs/${timestamp}_runw.log"
+    fi
     echo "📝 后端日志文件: $backend_log_file"
     echo "📝 前端日志文件: $frontend_log_file"
+    if [[ $enable_worker -eq 1 ]]; then
+        echo "📝 Worker 日志文件: $worker_log_file"
+    fi
     
     # 检查并处理现有服务
     check_and_handle_services() {
@@ -53,6 +72,16 @@ tsdev() {
             lsof -ti:3000 | xargs kill -9
         fi
         
+        # 如需，检查 temporal-worker 服务
+        if [[ $enable_worker -eq 1 ]]; then
+            local worker_container=$(docker-compose ps -q temporal-worker 2>/dev/null)
+            if [[ -n "$worker_container" ]] && docker ps -q --no-trunc | grep -q "$worker_container"; then
+                echo "⚠️  检测到 temporal-worker 正在运行，停止现有服务..."
+                docker-compose stop temporal-worker
+                docker-compose rm -f temporal-worker
+            fi
+        fi
+        
         echo "✅ 服务检查完成"
     }
     
@@ -63,6 +92,11 @@ tsdev() {
         
         # 停止后端docker服务
         docker-compose stop app 2>/dev/null || true
+        
+        # 停止 temporal-worker（如已启用）
+        if [[ $enable_worker -eq 1 ]]; then
+            docker-compose stop temporal-worker 2>/dev/null || true
+        fi
         
         # 停止前端npm进程
         if [[ -n "$frontend_pid" ]]; then
@@ -106,6 +140,9 @@ tsdev() {
     echo "📝 日志文件:"
     echo "   后端: $backend_log_file"
     echo "   前端: $frontend_log_file"
+    if [[ $enable_worker -eq 1 ]]; then
+        echo "   Worker: $worker_log_file"
+    fi
     echo ""
     
     # 启动后端服务（docker-compose）
@@ -118,8 +155,20 @@ tsdev() {
     (cd front && npm install && npm run dev) > "$frontend_log_file" 2>&1 &
     local frontend_pid=$!
     
+    # 启动 temporal-worker（如指定）
+    local worker_pid
+    if [[ $enable_worker -eq 1 ]]; then
+        echo "🕒 启动 temporal-worker..."
+        docker-compose up temporal-worker > "$worker_log_file" 2>&1 &
+        worker_pid=$!
+    fi
+    
     echo "✅ 前后端服务已启动"
-    echo "📊 服务进程 ID: 后端=$backend_pid, 前端=$frontend_pid"
+    if [[ $enable_worker -eq 1 ]]; then
+        echo "📊 服务进程 ID: 后端=$backend_pid, 前端=$frontend_pid, Worker=$worker_pid"
+    else
+        echo "📊 服务进程 ID: 后端=$backend_pid, 前端=$frontend_pid"
+    fi
     echo ""
     echo "💡 实时查看日志:"
     echo "   后端日志: view_logs"
@@ -128,7 +177,11 @@ tsdev() {
     echo ""
     
     # 等待任一服务退出
-    wait $backend_pid $frontend_pid
+    if [[ $enable_worker -eq 1 ]]; then
+        wait $backend_pid $frontend_pid $worker_pid
+    else
+        wait $backend_pid $frontend_pid
+    fi
     
     # 清理 trap
     trap - INT TERM
