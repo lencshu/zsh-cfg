@@ -66,8 +66,8 @@ tsdev() {
         
         # 检查前端进程（通过端口检查）
         if lsof -i :3000 >/dev/null 2>&1; then
-            echo "⚠️  检测到端口3000被占用（可能是前端服务），请手动停止相关进程"
-            echo "💡 可以使用命令: lsof -ti:3000 | xargs kill -9"
+            echo "⚠️  检测到端口3000被占用（可能是前端服务），将自动停止相关进程"
+            echo "💡 使用命令: lsof -ti:3000 | xargs kill -9"
             echo "Killing..."
             lsof -ti:3000 | xargs kill -9
         fi
