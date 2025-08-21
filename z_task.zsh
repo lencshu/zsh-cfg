@@ -1,7 +1,7 @@
 alias t='task'
 alias tls='task list'
 alias tb='task app:build'
-alias ttwb='task temporal:worker:build'
+alias tbw='task temporal:worker:build'
 alias tts='task temporal:start'
 alias ttw='task temporal:worker'
 alias ttwd='task temporal:stop'
