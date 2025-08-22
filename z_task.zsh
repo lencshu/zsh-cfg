@@ -3,8 +3,8 @@ alias tls='task list'
 alias tb='task app:build'
 alias tbw='task temporal:worker:build'
 alias tts='task temporal:start'
-alias ttw='task temporal:worker'
-alias ttwd='task temporal:stop'
+alias tw='task temporal:worker'
+alias twd='task temporal:stop'
 
 
 # alias tsb='t app:run 2>&1 | perl -pe "s/\x00//g; s/\e\[[0-9;]*[a-zA-Z]//g" > runb.log'
