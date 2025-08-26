@@ -5,7 +5,7 @@ alias tbw='task temporal:worker:build'
 alias tts='task temporal:start'
 alias tw='task temporal:worker'
 alias twd='task temporal:stop'
-
+alias tdbm=" task migrations:upgrade"
 
 # alias tsb='t app:run 2>&1 | perl -pe "s/\x00//g; s/\e\[[0-9;]*[a-zA-Z]//g" > runb.log'
 
