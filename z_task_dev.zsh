@@ -1,5 +1,6 @@
 # 简洁优雅的开发环境启动脚本
 # 同时启动前后端服务，后端使用docker-compose，前端使用npm，日志分别重定向到不同文件
+# 支持启动temporal-worker with -w flag
 
 tsdev() {
     echo "🚀 启动完整开发环境..."
